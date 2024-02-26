@@ -20,6 +20,25 @@
             android:layout_marginBottom="16dp"
             android:text="@string/perform_2_network_requests_sequentially" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp">
+
+            <Button
+                android:id="@+id/btnCounter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="counter"
+                android:layout_marginEnd="10dp"/>
+
+            <TextView
+                android:id="@+id/tvCounter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="just to check blocking"/>
+        </LinearLayout>
+
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"

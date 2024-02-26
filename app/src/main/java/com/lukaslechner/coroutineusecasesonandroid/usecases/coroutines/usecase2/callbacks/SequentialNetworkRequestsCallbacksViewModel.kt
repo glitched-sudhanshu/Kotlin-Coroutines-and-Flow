@@ -1,5 +1,7 @@
 package com.lukaslechner.coroutineusecasesonandroid.usecases.coroutines.usecase2.callbacks
 
+import android.os.Looper
+import android.util.Log
 import com.lukaslechner.coroutineusecasesonandroid.base.BaseViewModel
 import com.lukaslechner.coroutineusecasesonandroid.mock.AndroidVersion
 import com.lukaslechner.coroutineusecasesonandroid.mock.VersionFeatures
@@ -24,6 +26,9 @@ class SequentialNetworkRequestsCallbacksViewModel(
                 call: Call<List<AndroidVersion>>,
                 response: Response<List<AndroidVersion>>
             ) {
+                if (Looper.myLooper() == Looper.getMainLooper()) {
+                    Log.d("Thread Info", "Executing on the Main/UI Thread")
+                }
                 if(response.isSuccessful){
                     val latestAndroid = response.body()!!.last().apiLevel
                     androidFeatureCall = mockApi.getAndroidVersionFeatures(latestAndroid)

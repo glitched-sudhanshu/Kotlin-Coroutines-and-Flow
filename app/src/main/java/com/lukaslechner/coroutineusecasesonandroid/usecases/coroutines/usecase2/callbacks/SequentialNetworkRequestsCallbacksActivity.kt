@@ -31,8 +31,13 @@ class SequentialNetworkRequestsCallbacksActivity : BaseActivity() {
                 render(uiState)
             }
         })
+        var counter = 0
         binding.btnRequestsSequentially.setOnClickListener {
             viewModel.perform2SequentialNetworkRequest()
+        }
+        binding.btnCounter.setOnClickListener {
+            counter++
+            binding.tvCounter.text = "just to check blocking $counter"
         }
     }
 
