@@ -1,12 +1,37 @@
 package com.lukaslechner.coroutineusecasesonandroid.usecases.coroutines.usecase2.rx
 
+
 import com.lukaslechner.coroutineusecasesonandroid.base.BaseViewModel
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.schedulers.Schedulers
 
 class SequentialNetworkRequestsRxViewModel(
     private val mockApi: RxMockApi = mockApi()
 ) : BaseViewModel<UiState>() {
 
-    fun perform2SequentialNetworkRequest() {
+    private val disposable = CompositeDisposable()
 
+    fun perform2SequentialNetworkRequest() {
+        mockApi.getRecentAndroidVersions()
+            .flatMap { versionList ->
+                val recentVersion = versionList.last()
+                mockApi.getAndroidVersionFeatures(recentVersion.apiLevel)
+            }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onSuccess = { versionFeature ->
+                    uiState.value = UiState.Success(versionFeature)
+                },
+                onError = { uiState.value = UiState.Error("Something went wrong!") }
+            ).addTo(disposable)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        disposable.clear()
     }
 }
